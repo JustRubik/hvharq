@@ -13,9 +13,9 @@ add_executable(hvharq ${SRC_FILES})
 # Include files .h
 target_include_directories(hvharq PUBLIC include)
 
-add_custom_command(TARGET hvharq POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/dll"
-        "$<TARGET_FILE_DIR:hvharq>"
-        COMMENT "Copying .dll/.so files to build/"
-)
+# add_custom_command(TARGET hvharq POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#         # "${CMAKE_SOURCE_DIR}/dll"
+#         "$<TARGET_FILE_DIR:hvharq>"
+#         COMMENT "Copying .dll/.so files to build/"
+# )
