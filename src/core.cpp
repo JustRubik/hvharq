@@ -3,6 +3,12 @@
 Core::Core(){};
 // Core::Core() : input(""), output(""), check(true) {}; 
 
-void Core::checkReliability () {
-    check = (input == output) ? true : false;
+Core::~Core(){
+  cout << "~CORE()";
 }
+
+// void Core::checkReliability () {
+//     check = (input == output) ? true : false;
+// }
+
+
