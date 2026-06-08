@@ -1,19 +1,18 @@
 #pragma once
 
-#include <stdint.h>
-#include <string>
+#include <cstdint>
 
 class Transmitter {
-  private: 
-    std::string data; // data truyen
-    uint8_t buffer; // 3 bits
-  public:
-    Transmitter();
-    ~Transmitter(); 
-    std::string getData();  // getter
-    void setData();         // setter
-    void CRC_Encoder(); // ma hoa crc
-    void FEC_Encoder(); // ma hoa fec
-    void timer(); // set timeout
-};
+private:
+    std::string data;
+    uint16_t frameSize; // k bits
 
+public:
+    // Transmitter(uint16_t k);
+
+    const std::string& getData() const;
+    void setData(const std::string& data);
+
+    std::vector<std::vector<uint16_t>> segmentFrame();
+    // std::vector<std::vector<uint16_t>> crcFrame();
+};

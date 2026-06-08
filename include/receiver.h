@@ -8,8 +8,8 @@ class Receiver {
     std::string data; // data nhan duoc
     // uint8_t buffer; // 3 bits
   public:
-    Receiver();
-    ~Receiver(); 
+    // Receiver();
+    // ~Receiver(); 
     std::string getData();  // getter
     void setData();         // setter
     void CRC_Decoder(); // giai ma crc
