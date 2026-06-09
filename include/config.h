@@ -18,4 +18,6 @@ constexpr uint8_t MAX_RETX = 4;
 // Simulation
 constexpr uint32_t NUM_ITERATIONS = 1000;
 
+constexpr uint8_t G = 0b00000111; // đa thức sinh, = 0x07
+
 #endif

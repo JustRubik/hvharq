@@ -16,13 +16,5 @@ public:
 
     // Utility
     static uint8_t xorBits(const std::vector<uint8_t>& bits);
-
-
 };
-
-// typedef struct Frame {
-//   uint8_t id;
-//   std::vector<uint8_t> payload;
-// };
-
 #endif
