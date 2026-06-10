@@ -1,22 +1,23 @@
-#ifndef HELPER_H
-#define HELPER_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include <cstdint>
 
-class Helper {
+#include "..\include\config.h"
+
+class Helper
+{
 public:
     // String <-> Bitstream
-    static std::vector<uint8_t> stringToBits(const std::string& str);
-    static std::string bitsToString(const std::vector<uint8_t>& bits);
+    static std::vector<uint8_t> stringToBits(const std::string &str);
+    static std::string bitsToString(const Frame &bits);
 
     // Debug
-    static void printBits(const std::vector<uint8_t>& bits);
+    static void printBits(const Frame &bits);
 
     // Utility
-    static uint8_t xorBits(const std::vector<uint8_t>& bits);
+    static uint8_t xorBits(const Frame &bits);
 
-    static uint8_t computeCRC8(const std::vector<uint8_t> &bits);
+    static uint8_t computeCRC8(const Frame &bits);
 };
-#endif
