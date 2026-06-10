@@ -1,8 +1,9 @@
 #include "..\include\helper.h"
+#include "..\include\config.h"
 
 #include <iostream>
 
-std::vector<uint8_t> Helper::stringToBits(const std::string& str)
+std::vector<uint8_t> Helper::stringToBits(const std::string &str)
 {
     std::vector<uint8_t> bits;
 
@@ -17,7 +18,7 @@ std::vector<uint8_t> Helper::stringToBits(const std::string& str)
     return bits;
 }
 
-std::string Helper::bitsToString(const std::vector<uint8_t>& bits)
+std::string Helper::bitsToString(const std::vector<uint8_t> &bits)
 {
     std::string result;
 
@@ -41,7 +42,7 @@ std::string Helper::bitsToString(const std::vector<uint8_t>& bits)
     return result;
 }
 
-void Helper::printBits(const std::vector<uint8_t>& bits)
+void Helper::printBits(const std::vector<uint8_t> &bits)
 {
     for (uint8_t bit : bits)
     {
@@ -51,7 +52,7 @@ void Helper::printBits(const std::vector<uint8_t>& bits)
     std::cout << '\n';
 }
 
-uint8_t Helper::xorBits(const std::vector<uint8_t>& bits)
+uint8_t Helper::xorBits(const std::vector<uint8_t> &bits)
 {
     uint8_t result = 0;
 
@@ -61,4 +62,21 @@ uint8_t Helper::xorBits(const std::vector<uint8_t>& bits)
     }
 
     return result;
+}
+
+uint8_t Helper::computeCRC8(const std::vector<Bit> &bits)
+{
+    uint8_t crc = 0;
+
+    for (Bit bit : bits)
+    {
+        bool feedback = ((crc >> 7) & 1) ^ (bit & 1);
+
+        crc <<= 1;
+
+        if (feedback)
+            crc ^= G;
+    }
+
+    return crc;
 }

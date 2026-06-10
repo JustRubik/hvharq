@@ -14,7 +14,7 @@ enum State
     ACKed
 };
 
-class Transmitter
+class Sender
 {
 private:
     std::string data = "";

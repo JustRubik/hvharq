@@ -1,21 +1,25 @@
 #pragma once
 
-#include <stdint.h>
 #include <string>
+#include <vector>
+#include <cstdint>
 
-class Receiver {
-  private: 
-    std::string data; // data nhan duoc
-    // uint8_t buffer; // 3 bits
-  public:
-    // Receiver();
-    // ~Receiver(); 
-    std::string getData();  // getter
-    void setData();         // setter
-    void CRC_Decoder(); // giai ma crc
-    void FEC_Decoder(); // giai ma fec
-    void checkCRC();  // kiem tra bit crc du
-    void acknowledgement(); // tra ve ack hoac nak
-    // void timer();
+#include "..\include\config.h"
+#include "..\include\helper.h"
+
+class Receiver
+{
+private:
+  std::string data = "";
+
+public:
+  const std::string &getData() const;
+  void setData(const std::string &data);
+  void appendData(const std::string &data);
+
+  std::vector<Frame> viterbi(std::vector<Frame> &input);  // decode convo
+  bool checkCRC(Frame &frame);                            // kiểm tra crc
+  std::vector<Frame> removeCRC(std::vector<Frame> &frame); //  lọc lấy data
+  Frame removeCRCperFrame(Frame &frame);
+  std::string combineFrames(std::vector<Frame> &frames);   //  gom data
 };
-

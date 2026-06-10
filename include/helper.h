@@ -16,5 +16,7 @@ public:
 
     // Utility
     static uint8_t xorBits(const std::vector<uint8_t>& bits);
+
+    static uint8_t computeCRC8(const std::vector<uint8_t> &bits);
 };
 #endif

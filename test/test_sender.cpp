@@ -1,18 +1,16 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/transmitter.h"
+#include "../include/sender.h"
 #include "../include/config.h"
-
-using Bit = uint8_t;
-using Frame = std::vector<Bit>;
+#include "../include/helper.h"
 
 int main()
 {
-    Transmitter tx;
-    tx.setData("HIEURUBIK");
+    Sender sd;
+    sd.setData("HIEURUBIK");
 
-    std::vector<std::vector<uint8_t>> frames = tx.segmentFrame();
+    std::vector<std::vector<uint8_t>> frames = sd.segmentFrame();
 
     std::cout << "Number of frames: "
               << frames.size()
@@ -30,7 +28,7 @@ int main()
         std::cout << '\n';
     }
 
-    std::vector<std::vector<uint8_t>> crcFrame = tx.CRC(frames);
+    std::vector<std::vector<uint8_t>> crcFrame = sd.CRC(frames);
 
     for (size_t i = 0; i < crcFrame.size(); ++i)
     {
@@ -44,7 +42,7 @@ int main()
         std::cout << '\n';
     }
 
-    std::vector<std::vector<uint8_t>> ccFrame = tx.convolutionEncode(crcFrame);
+    std::vector<std::vector<uint8_t>> ccFrame = sd.convolutionEncode(crcFrame);
 
     for (size_t i = 0; i < ccFrame.size(); ++i)
     {
@@ -58,10 +56,7 @@ int main()
         std::cout << '\n';
     }
 
-    std::cout << "Data là " << tx.getData() << std::endl;
+    std::cout << "Data là " << sd.getData() << std::endl;
 
     return 0;
 }
-
-
-

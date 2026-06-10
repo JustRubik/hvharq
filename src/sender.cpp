@@ -1,21 +1,18 @@
-#include "..\include\transmitter.h"
+#include "..\include\sender.h"
 #include "..\include\config.h"
 #include "..\include\helper.h"
 
-using Bit = uint8_t;
-using Frame = std::vector<Bit>;
-
-const std::string &Transmitter::getData() const
+const std::string &Sender::getData() const
 {
     return data;
 }
 
-void Transmitter::setData(const std::string &data)
+void Sender::setData(const std::string &data)
 {
     this->data = data;
 }
 
-std::vector<Frame> Transmitter::segmentFrame()
+std::vector<Frame> Sender::segmentFrame()
 {
     std::vector<Bit> bits =
         Helper::stringToBits(this->data);
@@ -35,44 +32,17 @@ std::vector<Frame> Transmitter::segmentFrame()
             frame.push_back(bits[i + j]);
         }
 
-        if (frame.size() < PAYLOAD_BITS){
-            for(uint8_t k = 1; k <= 8; ++k)
-                frame.push_back(0);
-        }
-
         frames.push_back(frame);
     }
 
     return frames;
 }
 
-uint8_t computeCRC8(const std::vector<Bit> &bits)
-{
-    uint8_t crc = 0;
-
-    for (Bit bit : bits)
-    {
-        uint8_t in = bit & 1;
-
-        crc ^= (in << 7);
-
-        for (int i = 0; i < 8; ++i)
-        {
-            if (crc & 0x80)
-                crc = (crc << 1) ^ G;
-            else
-                crc <<= 1;
-        }
-    }
-
-    return crc;
-}
-
-std::vector<Frame> Transmitter::CRC(std::vector<Frame> &frames)
+std::vector<Frame> Sender::CRC(std::vector<Frame> &frames)
 {
     for (Frame &frame : frames)
     {
-        uint8_t crc = computeCRC8(frame);
+        uint8_t crc = Helper::computeCRC8(frame);
 
         for (int i = 7; i >= 0; --i)
         {
@@ -114,7 +84,7 @@ Frame convolutionEncodePerFrame(Frame &input)
     return output;
 }
 
-std::vector<Frame> Transmitter::convolutionEncode(std::vector<Frame> &input)
+std::vector<Frame> Sender::convolutionEncode(std::vector<Frame> &input)
 {
     std::vector<Frame> output;
     output.reserve(input.size());
@@ -126,4 +96,3 @@ std::vector<Frame> Transmitter::convolutionEncode(std::vector<Frame> &input)
 
     return output;
 }
-
