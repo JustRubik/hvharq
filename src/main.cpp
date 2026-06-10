@@ -1,32 +1,150 @@
-#include "main.h"
-
 #include <iostream>
-#include <string>
+#include <fstream>
+#include <chrono>
+
+#include "../include/config.h"
+#include "../include/helper.h"
+#include "../include/sender.h"
+#include "../include/receiver.h"
+#include "../include/channel.h"
+#include "../include/protocols.h"
 
 using namespace std;
 
 int main()
 {
-    cout << "--- STARTING SIMULATOR ---" << endl;
-    cout << "\n";
-    cout << "Please enter string to transmit: ";
-    
-    string s;
-    getline(cin, s);
+    ofstream csv("../docs/results.csv");
 
-    cout << "Input string: " << s << endl;
-    cout << "\n--- RUNNING THE SIMULATOR ---\n" << endl;
-    /* 
-       Core() here 
-    */
+    csv << "ID,"
+        << "scheme,"
+        << "BER,"
+        << "state,"
+        << "total_frames,"
+        << "retransmission,"
+        << "time(ms),"
+        << "efficiency,"
+        << "throughput\n";
 
-    cout << "Output string: "; // + output string right her
+    uint32_t id = 1;
 
-    cout << "\n--- COMPARE TWO STRINGS ---" << endl;
-    // cout << result << endl;
-    
-    cout << "\nConclusion: " << " ---" << endl; // add conclusion here
-    cout << "\n--- FINISHING SIMULATOR ---" << endl;
-    // cout << "Hello world" << endl;
-	return 0;
+    vector<double> BER_list =
+        {
+            0.001,
+            0.005,
+            0.01,
+            0.05};
+
+    string message =
+        "Hello HARQ simulator";
+
+    //-----------------------------------------
+    // chạy với từng BER
+    //-----------------------------------------
+    for (double ber : BER_list)
+    {
+        //-----------------------------------------
+        // ARQ
+        //-----------------------------------------
+        for (int i = 0; i < NUM_ITERATIONS; i++)
+        {
+            Sender tx;
+            Receiver rx;
+            Channel channel(ber);
+            Protocols::Arq arq;
+
+            tx.setData(message);
+
+            size_t total_frames =
+                tx.segmentFrame().size();
+
+            auto start =
+                chrono::high_resolution_clock::now();
+
+            arq.runArq(tx, rx, channel);
+
+            auto stop =
+                chrono::high_resolution_clock::now();
+
+            double time_ms =
+                chrono::duration<double, milli>(stop - start).count();
+
+            bool state =
+                (tx.getData() == rx.getData());
+
+            double efficiency =
+                (double)message.size() * 8 /
+                (double)((total_frames + arq.getRetx()) * FRAME_SIZE);
+
+            double throughput =
+                ((double)message.size() * 8) / time_ms;
+
+            csv
+                << id++ << ","
+                << "ARQ,"
+                << ber << ","
+                << state << ","
+                << total_frames << ","
+                << (int)arq.getRetx() << ","
+                << time_ms << ","
+                << efficiency << ","
+                << throughput
+                << '\n';
+        }
+
+        //-----------------------------------------
+        // HARQ
+        //-----------------------------------------
+        for (int i = 0; i < NUM_ITERATIONS; i++)
+        {
+            Sender tx;
+            Receiver rx;
+            Channel channel(ber);
+            Protocols::Harq harq;
+
+            tx.setData(message);
+
+            size_t total_frames =
+                tx.segmentFrame().size();
+
+            auto start =
+                chrono::high_resolution_clock::now();
+
+            harq.runHarq(tx, rx, channel);
+
+            auto stop =
+                chrono::high_resolution_clock::now();
+
+            double time_ms =
+                chrono::duration<double, milli>(stop - start).count();
+
+            bool state =
+                (tx.getData() == rx.getData());
+
+            double efficiency =
+                (double)message.size() * 8 /
+                (double)((total_frames + harq.getRetx()) * FRAME_SIZE);
+
+            double throughput =
+                ((double)message.size() * 8) / time_ms;
+
+            csv
+                << id++ << ","
+                << "HARQ,"
+                << ber << ","
+                << state << ","
+                << total_frames << ","
+                << (int)harq.getRetx() << ","
+                << time_ms << ","
+                << efficiency << ","
+                << throughput
+                << '\n';
+        }
+    }
+
+    csv.close();
+
+    cout << "Simulation completed.\n";
+    cout << "Results saved to results.csv\n";
+
+    return 0;
 }
