@@ -1,0 +1,149 @@
+#include <iostream>
+#include <fstream>
+#include <chrono>
+
+#include "../include/config.h"
+#include "../include/helper.h"
+#include "../include/sender.h"
+#include "../include/receiver.h"
+#include "../include/channel.h"
+#include "../include/protocols.h"
+
+using namespace std;
+
+int main()
+{
+	cout << "Running boundary test (BER = 0 and BER = 1)...\n";
+
+	ofstream csv("./csv/results_boundary.csv");
+
+	csv << "ID,"
+		<< "scheme,"
+		<< "BER,"
+		<< "state,"
+		<< "total_frames,"
+		<< "retransmission,"
+		<< "time(ms),"
+		<< "efficiency,"
+		<< "throughput\n";
+
+	uint32_t id = 1;
+
+	vector<double> BER_list =
+		{
+			0.0,
+			1.0};
+
+	string message =
+		"Hello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulator";
+
+	//-----------------------------------------
+	// For each BER
+	//-----------------------------------------
+	for (double ber : BER_list)
+	{
+		cout << "BER = " << ber << endl;
+
+		//-----------------------------------------
+		// ARQ
+		//-----------------------------------------
+		{
+			Sender tx;
+			Receiver rx;
+			Channel channel(ber);
+			Protocols::Arq arq;
+
+			tx.setData(message);
+
+			size_t total_frames =
+				tx.segmentFrame().size();
+
+			auto start =
+				chrono::high_resolution_clock::now();
+
+			arq.runArq(tx, rx, channel);
+
+			auto stop =
+				chrono::high_resolution_clock::now();
+
+			double time_ms =
+				chrono::duration<double, milli>(stop - start).count();
+
+			bool state =
+				(tx.getData() == rx.getData());
+
+			double efficiency =
+				(double)message.size() * 8 /
+				(double)((total_frames + arq.getRetx()) * FRAME_SIZE);
+
+			double throughput =
+				((double)message.size() * 8) / time_ms;
+
+			csv
+				<< id++ << ","
+				<< "ARQ,"
+				<< ber << ","
+				<< state << ","
+				<< total_frames << ","
+				<< (int)arq.getRetx() << ","
+				<< time_ms << ","
+				<< efficiency << ","
+				<< throughput
+				<< '\n';
+		}
+
+		//-----------------------------------------
+		// HARQ
+		//-----------------------------------------
+		{
+			Sender tx;
+			Receiver rx;
+			Channel channel(ber);
+			Protocols::Harq harq;
+
+			tx.setData(message);
+
+			size_t total_frames =
+				tx.segmentFrame().size();
+
+			auto start =
+				chrono::high_resolution_clock::now();
+
+			harq.runHarq(tx, rx, channel);
+
+			auto stop =
+				chrono::high_resolution_clock::now();
+
+			double time_ms =
+				chrono::duration<double, milli>(stop - start).count();
+
+			bool state =
+				(tx.getData() == rx.getData());
+
+			double efficiency =
+				(double)message.size() * 8 /
+				(double)((total_frames + harq.getRetx()) * FRAME_SIZE);
+
+			double throughput =
+				((double)message.size() * 8) / time_ms;
+
+			csv
+				<< id++ << ","
+				<< "HARQ,"
+				<< ber << ","
+				<< state << ","
+				<< total_frames << ","
+				<< (int)harq.getRetx() << ","
+				<< time_ms << ","
+				<< efficiency << ","
+				<< throughput
+				<< '\n';
+		}
+	}
+
+	csv.close();
+
+	cout << "Finished.\n";
+
+	return 0;
+}

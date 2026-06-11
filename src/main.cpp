@@ -13,6 +13,8 @@ using namespace std;
 
 int main()
 {
+    cout << "Simulating, wait for a few seconds..." << endl;
+
     ofstream csv("../docs/results.csv");
 
     csv << "ID,"
@@ -32,10 +34,13 @@ int main()
             0.001,
             0.005,
             0.01,
+            0.02,
+            0.03,
+            0.04,
             0.05};
 
     string message =
-        "Hello HARQ simulator";
+        "Hello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulatorHello HARQ simulator"; // Hello HARQ simulator x10
 
     //-----------------------------------------
     // chạy với từng BER
@@ -57,12 +62,12 @@ int main()
             size_t total_frames =
                 tx.segmentFrame().size();
 
-            auto start =
+            std::chrono::_V2::system_clock::time_point start =
                 chrono::high_resolution_clock::now();
 
             arq.runArq(tx, rx, channel);
 
-            auto stop =
+            std::chrono::_V2::system_clock::time_point stop =
                 chrono::high_resolution_clock::now();
 
             double time_ms =

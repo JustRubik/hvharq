@@ -8,7 +8,7 @@ using Bit = uint8_t;
 using Frame = std::vector<Bit>;
 
 // Frame
-constexpr uint16_t PAYLOAD_BITS = 64;
+constexpr uint16_t PAYLOAD_BITS = 32;
 
 // CRC
 constexpr uint16_t CRC_BITS = 8;
@@ -22,7 +22,7 @@ constexpr double BER = 0.01;
 constexpr uint8_t MAX_RETX = 15;
 
 // Simulation
-constexpr uint32_t NUM_ITERATIONS = 100;
+constexpr uint32_t NUM_ITERATIONS = 1000;
 
 constexpr uint8_t G = 0b00000111; // đa thức sinh, = 0x07
 
