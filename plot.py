@@ -1,114 +1,324 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# đọc dữ liệu
-df = pd.read_csv("./docs/results.csv")
-
-# lấy trung bình theo scheme và BER
-summary = (
-    df.groupby(["scheme", "BER"])
-      .mean(numeric_only=True)
-      .reset_index()
-)
-
-# tách ARQ và HARQ
-arq = summary[summary["scheme"] == "ARQ"]
-harq = summary[summary["scheme"] == "HARQ"]
+# ===============================
+# Cấu hình đồ thị
+# ===============================
+sns.set_theme(style="whitegrid")
+plt.rcParams.update({
+    'font.size': 12,
+    'axes.titlesize': 14
+})
 
 
-# ========================
-# Efficiency vs BER
-# ========================
-plt.figure()
-
-plt.plot(arq["BER"],
-         arq["efficiency"],
-         marker='o',
-         label="ARQ")
-
-plt.plot(harq["BER"],
-         harq["efficiency"],
-         marker='o',
-         label="HARQ")
-
-plt.xlabel("BER")
-plt.ylabel("Efficiency")
-plt.title("Efficiency vs BER")
-plt.grid()
-plt.legend()
-
-plt.savefig("./docs/images/efficiency.png")
+# ===============================
+# Hàm đọc file csv
+# ===============================
+def load_csv(path):
+    try:
+        return pd.read_csv(path)
+    except FileNotFoundError:
+        print(f"❌ Không tìm thấy {path}")
+        return None
 
 
-# ========================
-# Throughput vs BER
-# ========================
-plt.figure()
+# ===============================
+# KB1
+# ===============================
+def plot_kb1():
 
-plt.plot(arq["BER"],
-         arq["throughput"],
-         marker='o',
-         label="ARQ")
+    df = load_csv("./csv/results_kb1.csv")
+    if df is None:
+        return
 
-plt.plot(harq["BER"],
-         harq["throughput"],
-         marker='o',
-         label="HARQ")
+    df_plot = (
+        df.groupby(["BER", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
 
-plt.xlabel("BER")
-plt.ylabel("Throughput")
-plt.title("Throughput vs BER")
-plt.grid()
-plt.legend()
+    plt.figure(figsize=(8, 6))
 
-plt.savefig("./docs/images/throughput.png")
+    sns.barplot(
+        data=df_plot,
+        x="BER",
+        y="efficiency",
+        hue="scheme"
+    )
 
+    plt.title("KB1: Efficiency vs BER")
+    plt.xlabel("BER")
+    plt.ylabel("Efficiency")
 
-# ========================
-# Retransmission vs BER
-# ========================
-plt.figure()
+    plt.tight_layout()
+    plt.savefig("./csv/plot_KB1.png", dpi=300)
 
-plt.plot(arq["BER"],
-         arq["retransmission"],
-         marker='o',
-         label="ARQ")
+    print("✅ Đã lưu plot_KB1.png")
 
-plt.plot(harq["BER"],
-         harq["retransmission"],
-         marker='o',
-         label="HARQ")
-
-plt.xlabel("BER")
-plt.ylabel("Average Retransmission")
-plt.title("Retransmission vs BER")
-plt.grid()
-plt.legend()
-
-plt.savefig("./docs/images/retransmission.png")
-
-plt.show()
+    plt.show()
 
 
-# Time vs number of iterations
-plt.figure()
+# ===============================
+# KB2
+# ===============================
+def plot_kb2():
 
-plt.plot(arq["ID"],
-         arq["time(ms)"],
-         marker='o',
-         label="ARQ")
+    df = load_csv("./csv/results_kb2.csv")
+    if df is None:
+        return
 
-plt.plot(arq["ID"],
-         arq["time(ms)"],
-         marker='o',
-         label="HARQ")
+    df_plot = (
+        df.groupby(["BER", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
 
-plt.xlabel("Number of Iterations")
-plt.ylabel("Total time")
-plt.title("Total time vs Number of Iterations")
-plt.grid()
-plt.legend()
+    plt.figure(figsize=(8, 6))
 
-plt.savefig("./docs/images/time.png")
+    sns.lineplot(
+        data=df_plot,
+        x="BER",
+        y="efficiency",
+        hue="scheme",
+        marker="o"
+    )
 
-plt.show()
+    plt.title("KB2: Efficiency in High Noise Environment")
+    plt.xlabel("BER")
+    plt.ylabel("Efficiency")
+
+    plt.tight_layout()
+    plt.savefig("./csv/plot_KB2.png", dpi=300)
+
+    print("✅ Đã lưu plot_KB2.png")
+
+    plt.show()
+
+
+# ===============================
+# KB3
+# ===============================
+def plot_kb3():
+
+    df = load_csv("./csv/results_kb3.csv")
+    if df is None:
+        return
+
+    df_plot = (
+        df.groupby(["BER", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+
+    plt.figure(figsize=(8, 6))
+
+    sns.lineplot(
+        data=df_plot,
+        x="BER",
+        y="efficiency",
+        hue="scheme",
+        marker="o"
+    )
+
+    plt.xscale("log")
+
+    plt.title("KB3: Efficiency vs BER")
+    plt.xlabel("BER")
+    plt.ylabel("Efficiency")
+
+    plt.tight_layout()
+    plt.savefig("./csv/plot_KB3.png", dpi=300)
+
+    print("✅ Đã lưu plot_KB3.png")
+
+    plt.show()
+
+
+# ===============================
+# KB4
+# ===============================
+def plot_kb4():
+
+    df = load_csv("./csv/results_kb4.csv")
+    if df is None:
+        return
+
+    df_plot = (
+        df.groupby(["msg_length", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+    sns.barplot(
+        data=df_plot,
+        x="msg_length",
+        y="throughput",
+        hue="scheme",
+        ax=axes[0]
+    )
+
+    axes[0].set_title("Throughput vs Input Size")
+    axes[0].set_xlabel("Message length (Bytes)")
+    axes[0].set_ylabel("Throughput (bps)")
+
+
+    sns.barplot(
+        data=df_plot,
+        x="msg_length",
+        y="efficiency",
+        hue="scheme",
+        ax=axes[1]
+    )
+
+    axes[1].set_title("Efficiency vs Input Size")
+    axes[1].set_xlabel("Message length (Bytes)")
+    axes[1].set_ylabel("Efficiency")
+
+    plt.tight_layout()
+
+    plt.savefig("./csv/plot_KB4.png", dpi=300)
+
+    print("✅ Đã lưu plot_KB4.png")
+
+    plt.show()
+
+
+# ===============================
+# Vẽ tổng hợp
+# ===============================
+def plot_all():
+
+    df1 = load_csv("./csv/results_kb1.csv")
+    df2 = load_csv("./csv/results_kb2.csv")
+    df3 = load_csv("./csv/results_kb3.csv")
+    df4 = load_csv("./csv/results_kb4.csv")
+
+    if any(df is None for df in [df1, df2, df3, df4]):
+        return
+
+
+    df1 = (
+        df1.groupby(["BER", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+
+    df2 = (
+        df2.groupby(["BER", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+
+    df3 = (
+        df3.groupby(["BER", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+
+    df4 = (
+        df4.groupby(["msg_length", "scheme"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+
+
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+
+    sns.barplot(
+        data=df1,
+        x="BER",
+        y="efficiency",
+        hue="scheme",
+        ax=axes[0, 0]
+    )
+
+    axes[0, 0].set_title("KB1")
+
+
+    sns.lineplot(
+        data=df2,
+        x="BER",
+        y="efficiency",
+        hue="scheme",
+        marker="o",
+        ax=axes[0, 1]
+    )
+
+    axes[0, 1].set_title("KB2")
+
+
+    sns.lineplot(
+        data=df3,
+        x="BER",
+        y="efficiency",
+        hue="scheme",
+        marker="o",
+        ax=axes[1, 0]
+    )
+
+    axes[1, 0].set_xscale("log")
+    axes[1, 0].set_title("KB3")
+
+
+    sns.barplot(
+        data=df4,
+        x="msg_length",
+        y="efficiency",
+        hue="scheme",
+        ax=axes[1, 1]
+    )
+
+    axes[1, 1].set_title("KB4")
+
+
+    plt.tight_layout()
+
+    plt.savefig("./csv/plot_ALL.png", dpi=300)
+
+    print("✅ Đã lưu plot_ALL.png")
+
+    plt.show()
+
+
+# ===============================
+# Menu
+# ===============================
+while True:
+
+    print("\n===================================")
+    print(" TOOL VE DO THI - NHOM 10")
+    print("===================================")
+    print("1. KB1")
+    print("2. KB2")
+    print("3. KB3")
+    print("4. KB4")
+    print("5. Tong hop")
+    print("0. Thoat")
+    print("===================================")
+
+    choice = input("Nhap lua chon: ")
+
+    if choice == '1':
+        plot_kb1()
+
+    elif choice == '2':
+        plot_kb2()
+
+    elif choice == '3':
+        plot_kb3()
+
+    elif choice == '4':
+        plot_kb4()
+
+    elif choice == '5':
+        plot_all()
+
+    elif choice == '0':
+        break
+
+    else:
+        print("Lua chon khong hop le.")
