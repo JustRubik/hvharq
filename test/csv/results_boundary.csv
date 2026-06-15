@@ -1,5 +1,0 @@
-ID,scheme,BER,state,total_frames,retransmission,time(ms),efficiency,throughput
-1,ARQ,0,1,50,0,0.2709,0.8,5906.24
-2,HARQ,0,1,50,0,2.2855,0.8,700.066
-3,ARQ,1,0,50,32,2.2153,0.487805,722.25
-4,HARQ,1,0,50,32,34.5971,0.487805,46.2467

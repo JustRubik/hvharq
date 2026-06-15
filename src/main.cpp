@@ -188,6 +188,7 @@ void runCore(
 int main()
 {
     int choice;
+    char check;
     do
     {
         printMenu();
@@ -195,7 +196,6 @@ int main()
 
         if (choice == 0)
         {
-            cout << "Thoat chuong trinh. Tam biet!\n";
             break;
         }
 
@@ -216,7 +216,7 @@ int main()
             ofstream csv;
             uint32_t id = 1;
 
-            openCsv(csv, "../csv/results_kb1.csv");
+            openCsv(csv, "./csv/results_kb1.csv");
 
             runCore(
                 csv,
@@ -227,6 +227,7 @@ int main()
                 vector<double>{0.0, 1.0});
 
             csv.close();
+            cout << "Hoan thanh KB1\n";
         }
 
         if (choice == 2 || choice == 5)
@@ -236,7 +237,7 @@ int main()
             ofstream csv;
             uint32_t id = 1;
 
-            openCsv(csv, "../csv/results_kb2.csv");
+            openCsv(csv, "./csv/results_kb2.csv");
 
             runCore(
                 csv,
@@ -244,9 +245,10 @@ int main()
                 "KB2",
                 "Default",
                 default_msg,
-                vector<double>{0.05, 0.1, 0.15, 0.2, 0.3});
+                vector<double>{0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5});
 
             csv.close();
+            cout << "Hoan thanh KB2\n";
         }
 
         if (choice == 3 || choice == 5)
@@ -256,7 +258,7 @@ int main()
             ofstream csv;
             uint32_t id = 1;
 
-            openCsv(csv, "../csv/results_kb3.csv");
+            openCsv(csv, "./csv/results_kb3.csv");
 
             runCore(
                 csv,
@@ -267,6 +269,7 @@ int main()
                 vector<double>{0.0001, 0.001, 0.005, 0.01, 0.05, 0.1, 0.2});
 
             csv.close();
+            cout << "Hoan thanh KB3\n";
         }
 
         if (choice == 4 || choice == 5)
@@ -276,7 +279,7 @@ int main()
             ofstream csv;
             uint32_t id = 1;
 
-            openCsv(csv, "../csv/results_kb4.csv");
+            openCsv(csv, "./csv/results_kb4.csv");
 
             double fixed_ber = 0.02;
 
@@ -306,8 +309,14 @@ int main()
             }
 
             csv.close();
+            cout << "Hoan thanh KB4\n";
         }
-    } while (choice != 0);
+
+        cout << "Tiep tuc? (y/n)\n";
+        cin >> check;
+    } while (choice != 0 && (check == 'y' || check == 'Y'));
+
+    cout << "Thoat chuong trinh. Tam biet!\n";
 
     return 0;
 }

@@ -8,12 +8,12 @@ using Bit = uint8_t;
 using Frame = std::vector<Bit>;
 
 // Frame
-constexpr uint16_t PAYLOAD_BITS = 32;
+constexpr uint16_t PAYLOAD_BITS = 128;
 
 // CRC
 constexpr uint16_t CRC_BITS = 8;
 
-constexpr uint16_t FRAME_SIZE = PAYLOAD_BITS + CRC_BITS;
+constexpr uint16_t FRAME_SIZE = PAYLOAD_BITS + CRC_BITS; // default = 64 + 8
 
 // Channel
 constexpr double BER = 0.01;
