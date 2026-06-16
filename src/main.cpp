@@ -281,7 +281,7 @@ int main()
 
             openCsv(csv, "./csv/results_kb4.csv");
 
-            double fixed_ber = 0.02;
+            double fixed_ber = 1e-2;
 
             string base_msg = "Hello HARQ simulator";
 

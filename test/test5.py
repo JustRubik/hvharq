@@ -67,6 +67,7 @@ axes[0].set_xlabel(
 )
 
 axes[0].set_ylabel(
+    
     "Throughput (bps)")
 
 
