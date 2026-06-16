@@ -26,7 +26,7 @@ void printMenu()
     cout << "   MO PHONG GIAO THUC ARQ VA HARQ - NHOM 10\n";
     cout << "========================================================\n";
     cout << "1. KB1: Kiem tra chuc nang (p=0 va p=1)\n";
-    cout << "2. KB2: HARQ vuot troi o moi truong nhieu cao (p > 0.05)\n";
+    cout << "2. KB2: HARQ vuot troi o moi truong nhieu cao (p > 0.0005)\n";
     cout << "3. KB3: Danh gia toan dien theo dai p (Sweep BER)\n";
     cout << "4. KB4: Kiem tra anh huong kich thuoc dau vao (Fixed p)\n";
     cout << "5. Chay TAT CA 4 kich ban\n";
@@ -245,7 +245,7 @@ int main()
                 "KB2",
                 "Default",
                 default_msg,
-                vector<double>{5e-4, 8e-4, 1e-3, 2e-3, 5e-3, 8e-3, 1e-2, 2e-2, 3e-2, 4e-2, 5e-2});
+                vector<double>{5e-4, 8e-4, 1e-3, 2e-3, 5e-3, 8e-3, 1e-2, 2e-2});
 
             csv.close();
             cout << "Hoan thanh KB2\n";
@@ -281,7 +281,7 @@ int main()
 
             openCsv(csv, "./csv/results_kb4.csv");
 
-            double fixed_ber = 1e-2;
+            double fixed_ber = 1e-4;
 
             string base_msg = "Hello HARQ simulator";
 
