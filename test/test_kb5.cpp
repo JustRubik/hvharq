@@ -179,9 +179,9 @@ int main()
 	ofstream csv;
 	uint32_t id = 1;
 
-	openCsv(csv, "./csv/results_kb5_fs136.csv");
+	openCsv(csv, "./csv/results_kb5_fs80.csv");
 
-	double fixed_ber = 0.000001;
+	double fixed_ber = 1e-4;
 
 	string base_msg = "Hello HARQ simulator";
 

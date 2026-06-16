@@ -15,6 +15,7 @@ files = {
     24: "./csv/results_kb5_fs24.csv",
     40: "./csv/results_kb5_fs40.csv",
     72: "./csv/results_kb5_fs72.csv",
+    80: "./csv/results_kb5_fs80.csv",
     136: "./csv/results_kb5_fs136.csv"
 }
 
@@ -29,7 +30,6 @@ for frame_size, filename in files.items():
     dfs.append(df)
 
 df = pd.concat(dfs, ignore_index=True)
-
 
 # ============================
 # Lấy giá trị trung bình
@@ -46,7 +46,7 @@ df_plot = (
 # ============================
 # Vẽ
 # ============================
-fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+fig, axes = plt.subplots(1, 3, figsize=(21, 6))
 
 # Throughput
 sns.barplot(
@@ -54,6 +54,7 @@ sns.barplot(
     x="frame_size",
     y="throughput",
     hue="scheme",
+    errorbar=None,
     ax=axes[0]
 )
 
@@ -66,8 +67,7 @@ axes[0].set_xlabel(
 )
 
 axes[0].set_ylabel(
-    "Throughput (bps)"
-)
+    "Throughput (bps)")
 
 
 # Efficiency
@@ -76,6 +76,7 @@ sns.barplot(
     x="frame_size",
     y="efficiency",
     hue="scheme",
+    errorbar=None,
     ax=axes[1]
 )
 
@@ -88,8 +89,30 @@ axes[1].set_xlabel(
 )
 
 axes[1].set_ylabel(
-    "Efficiency"
+    "Efficiency")
+
+
+# Time
+sns.barplot(
+    data=df_plot,
+    x="frame_size",
+    y="time(ms)",
+    hue="scheme",
+    errorbar=None,
+    ax=axes[2]
 )
+
+axes[2].set_title(
+    "KB5: Execution Time vs Frame Size"
+)
+
+axes[2].set_xlabel(
+    "Frame size (bits)"
+)
+
+axes[2].set_ylabel(
+    "Time (ms)")
+
 
 plt.tight_layout()
 

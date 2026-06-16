@@ -245,7 +245,7 @@ int main()
                 "KB2",
                 "Default",
                 default_msg,
-                vector<double>{0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5});
+                vector<double>{5e-4, 8e-4, 1e-3, 2e-3, 5e-3, 8e-3, 1e-2, 2e-2, 3e-2, 4e-2, 5e-2});
 
             csv.close();
             cout << "Hoan thanh KB2\n";
@@ -266,7 +266,7 @@ int main()
                 "KB3",
                 "Default",
                 default_msg,
-                vector<double>{0.0001, 0.001, 0.005, 0.01, 0.05, 0.1, 0.2});
+                vector<double>{1e-5, 2e-5, 5e-5, 8e-5, 1e-4, 5e-4, 1e-3});
 
             csv.close();
             cout << "Hoan thanh KB3\n";
