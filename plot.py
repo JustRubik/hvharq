@@ -38,20 +38,42 @@ def plot_kb1():
         .reset_index()
     )
 
-    plt.figure(figsize=(8, 6))
+    # Tạo 2 đồ thị cạnh nhau
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
+    # ===== Efficiency (bits) =====
     sns.barplot(
         data=df_plot,
         x="BER",
-        y="efficiency",
-        hue="scheme"
+        y="efficiency_bits",
+        hue="scheme",
+        ax=axes[0]
     )
 
-    plt.title("KB1: Efficiency vs BER")
-    plt.xlabel("BER")
-    plt.ylabel("Efficiency")
+    axes[0].set_title("Efficiency (Bits)")
+    axes[0].set_xlabel("BER")
+    axes[0].set_ylabel("Efficiency")
+
+    # ===== Efficiency (frames) =====
+    sns.barplot(
+        data=df_plot,
+        x="BER",
+        y="efficiency_frames",
+        hue="scheme",
+        ax=axes[1]
+    )
+
+    axes[1].set_title("Efficiency (Frames)")
+    axes[1].set_xlabel("BER")
+    axes[1].set_ylabel("Efficiency")
+
+    # Tránh legend bị lặp
+    axes[1].legend_.remove()
+
+    plt.suptitle("KB2: Efficiency in High Noise Environment")
 
     plt.tight_layout()
+
     plt.savefig("./csv/plot_KB1.png", dpi=300)
 
     print("✅ Đã lưu plot_KB1.png")
@@ -74,27 +96,49 @@ def plot_kb2():
         .reset_index()
     )
 
-    plt.figure(figsize=(8, 6))
+    # Tạo 2 đồ thị cạnh nhau
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
+    # ===== Efficiency (bits) =====
     sns.lineplot(
         data=df_plot,
         x="BER",
-        y="efficiency",
+        y="efficiency_bits",
         hue="scheme",
-        marker="o"
+        marker="o",
+        ax=axes[0]
     )
 
-    plt.title("KB2: Efficiency in High Noise Environment")
-    plt.xlabel("BER")
-    plt.ylabel("Efficiency")
+    axes[0].set_title("Efficiency (Bits)")
+    axes[0].set_xlabel("BER")
+    axes[0].set_ylabel("Efficiency")
+
+    # ===== Efficiency (frames) =====
+    sns.lineplot(
+        data=df_plot,
+        x="BER",
+        y="efficiency_frames",
+        hue="scheme",
+        marker="o",
+        ax=axes[1]
+    )
+
+    axes[1].set_title("Efficiency (Frames)")
+    axes[1].set_xlabel("BER")
+    axes[1].set_ylabel("Efficiency")
+
+    # Tránh legend bị lặp
+    axes[1].legend_.remove()
+
+    plt.suptitle("KB2: Efficiency in High Noise Environment")
 
     plt.tight_layout()
+
     plt.savefig("./csv/plot_KB2.png", dpi=300)
 
     print("✅ Đã lưu plot_KB2.png")
 
     plt.show()
-
 
 # ===============================
 # KB3
@@ -111,29 +155,49 @@ def plot_kb3():
         .reset_index()
     )
 
-    plt.figure(figsize=(8, 6))
+    # Tạo 2 đồ thị cạnh nhau
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
+    # ===== Efficiency (bits) =====
     sns.lineplot(
         data=df_plot,
         x="BER",
-        y="efficiency",
+        y="efficiency_bits",
         hue="scheme",
-        marker="o"
+        marker="o",
+        ax=axes[0]
     )
 
-    plt.xscale("log")
+    axes[0].set_title("Efficiency (Bits)")
+    axes[0].set_xlabel("BER")
+    axes[0].set_ylabel("Efficiency")
 
-    plt.title("KB3: Efficiency vs BER")
-    plt.xlabel("BER")
-    plt.ylabel("Efficiency")
+    # ===== Efficiency (frames) =====
+    sns.lineplot(
+        data=df_plot,
+        x="BER",
+        y="efficiency_frames",
+        hue="scheme",
+        marker="o",
+        ax=axes[1]
+    )
+
+    axes[1].set_title("Efficiency (Frames)")
+    axes[1].set_xlabel("BER")
+    axes[1].set_ylabel("Efficiency")
+
+    # Tránh legend bị lặp
+    axes[1].legend_.remove()
+
+    plt.suptitle("KB3: Efficiency vs BER")
 
     plt.tight_layout()
+
     plt.savefig("./csv/plot_KB3.png", dpi=300)
 
     print("✅ Đã lưu plot_KB3.png")
 
     plt.show()
-
 
 # ===============================
 # KB4
@@ -150,32 +214,71 @@ def plot_kb4():
         .reset_index()
     )
 
-    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    # Tạo 4 đồ thị trong cùng một hình
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
+    # ===== Throughput =====
     sns.barplot(
         data=df_plot,
         x="msg_length",
         y="throughput",
         hue="scheme",
-        ax=axes[0]
+        ax=axes[0, 0]
     )
 
-    axes[0].set_title("Throughput vs Input Size")
-    axes[0].set_xlabel("Message length (Bytes)")
-    axes[0].set_ylabel("Throughput (bps)")
+    axes[0, 0].set_title("Throughput vs Input Size")
+    axes[0, 0].set_xlabel("Message length (Bytes)")
+    axes[0, 0].set_ylabel("Throughput (bps)")
 
 
+    # ===== Efficiency (Frames) =====
     sns.barplot(
         data=df_plot,
         x="msg_length",
-        y="efficiency",
+        y="efficiency_frames",
         hue="scheme",
-        ax=axes[1]
+        ax=axes[0, 1]
     )
 
-    axes[1].set_title("Efficiency vs Input Size")
-    axes[1].set_xlabel("Message length (Bytes)")
-    axes[1].set_ylabel("Efficiency")
+    axes[0, 1].set_title("Frame Efficiency vs Input Size")
+    axes[0, 1].set_xlabel("Message length (Bytes)")
+    axes[0, 1].set_ylabel("Efficiency")
+
+
+    # ===== Efficiency (Bits) =====
+    sns.barplot(
+        data=df_plot,
+        x="msg_length",
+        y="efficiency_bits",
+        hue="scheme",
+        ax=axes[1, 0]
+    )
+
+    axes[1, 0].set_title("Bit Efficiency vs Input Size")
+    axes[1, 0].set_xlabel("Message length (Bytes)")
+    axes[1, 0].set_ylabel("Efficiency")
+
+
+    # ===== Time =====
+    sns.barplot(
+        data=df_plot,
+        x="msg_length",
+        y="retransmission",
+        hue="scheme",
+        ax=axes[1, 1]
+    )
+
+    axes[1, 1].set_title("Transmission Time vs Input Size")
+    axes[1, 1].set_xlabel("Message length (Bytes)")
+    axes[1, 1].set_ylabel("Time (ms)")
+
+
+    # Chỉ giữ legend ở một đồ thị
+    axes[0, 1].legend_.remove()
+    axes[1, 0].legend_.remove()
+    axes[1, 1].legend_.remove()
+
+    plt.suptitle("KB4: Performance vs Input Size")
 
     plt.tight_layout()
 
@@ -184,7 +287,6 @@ def plot_kb4():
     print("✅ Đã lưu plot_KB4.png")
 
     plt.show()
-
 
 # ===============================
 # Vẽ tổng hợp

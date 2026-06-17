@@ -12,6 +12,16 @@ void Receiver::setData(const std::string &data)
 	this->data = data;
 }
 
+const size_t &Receiver::getFrames() const
+{
+	return total_frames_rx;
+}
+
+void Receiver::setFrames(const size_t &frames)
+{
+	this->total_frames_rx += frames;
+}
+
 void Receiver::appendData(const std::string &data)
 {
 	this->data.append(data);

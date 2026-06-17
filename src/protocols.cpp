@@ -64,6 +64,7 @@ void Protocols::Harq::runHarq(Sender &tx, Receiver &rx, Channel &channel)
 				rx.appendData(msg);
 
 				ACK = true;
+				rx.setFrames(1);
 			}
 			else
 			{
@@ -117,6 +118,7 @@ void Protocols::Arq::runArq(
 					Helper::bitsToString(payload));
 
 				ACK = true;
+				rx.setFrames(1);
 			}
 			else
 			{

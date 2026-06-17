@@ -11,10 +11,13 @@ class Receiver
 {
 private:
   std::string data = "";
+  size_t total_frames_rx = 0;
 
 public:
   const std::string &getData() const;
   void setData(const std::string &data);
+  const size_t &getFrames() const;
+  void setFrames(const size_t &frames);
   void appendData(const std::string &data);
 
   std::vector<Frame> viterbi(std::vector<Frame> &input);  // decode convo

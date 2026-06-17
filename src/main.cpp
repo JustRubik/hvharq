@@ -13,7 +13,7 @@
 
 using namespace std;
 
-// Cấu trúc hỗ trợ KB4
+// Cấu trúc hỗ trợ 4 KB
 struct TestCase
 {
     string label;
@@ -43,7 +43,7 @@ void openCsv(ofstream &csv, string filename)
 
     if (csv.tellp() == 0)
     {
-        csv << "ID,scenario,scheme,message_label,msg_length,BER,state,total_frames,retransmission,time(ms),efficiency,throughput\n";
+        csv << "ID,scenario,scheme,message_label,msg_length,BER,state,total_frames,retransmission,time(ms),efficiency_bits,efficiency_frames,throughput\n";
     }
 }
 
@@ -77,12 +77,15 @@ void runArqExperiment(
 
         bool state = (tx.getData() == rx.getData());
 
-        double efficiency =
-            (double)(msg.size() * 8) / ((total_frames + arq.getRetx()) * FRAME_SIZE);
+        double efficiency_bits, efficiency_frames;
+        size_t total_frames_rx = rx.getFrames();
+        double total_data = total_frames_rx + arq.getRetx();
+        efficiency_bits = (double)(rx.getData().size() * 8) / (total_data * FRAME_SIZE);
+        efficiency_frames = (double)(total_frames_rx) / (total_data);
 
         double throughput =
             (time_ms > 0)
-                ? (msg.size() * 8.0 / time_ms)
+                ? (total_data * FRAME_SIZE / time_ms)
                 : 0;
 
         csv << id++ << ","
@@ -95,7 +98,8 @@ void runArqExperiment(
             << total_frames << ","
             << (int)arq.getRetx() << ","
             << time_ms << ","
-            << efficiency << ","
+            << efficiency_bits << ","
+            << efficiency_frames << ","
             << throughput
             << '\n';
     }
@@ -131,12 +135,16 @@ void runHarqExperiment(
 
         bool state = (tx.getData() == rx.getData());
 
-        double efficiency =
-            (double)(msg.size() * 8) / ((total_frames + harq.getRetx()) * FRAME_SIZE);
+        // size_t number_frames = total_frames;
+        double efficiency_bits, efficiency_frames;
+        size_t total_frames_rx = rx.getFrames();
+        double total_data = total_frames_rx + harq.getRetx();
+        efficiency_bits = (double)(rx.getData().size() * 8) / (total_data * FRAME_SIZE_FEC);
+        efficiency_frames = (double)(total_frames_rx) / (total_data);
 
         double throughput =
             (time_ms > 0)
-                ? (msg.size() * 8.0 / time_ms)
+                ? (total_data * FRAME_SIZE_FEC / time_ms)
                 : 0;
 
         csv << id++ << ","
@@ -149,7 +157,8 @@ void runHarqExperiment(
             << total_frames << ","
             << (int)harq.getRetx() << ","
             << time_ms << ","
-            << efficiency << ","
+            << efficiency_bits << ","
+            << efficiency_frames << ","
             << throughput
             << '\n';
     }
@@ -266,7 +275,7 @@ int main()
                 "KB3",
                 "Default",
                 default_msg,
-                vector<double>{1e-5, 2e-5, 5e-5, 8e-5, 1e-4, 5e-4, 1e-3});
+                vector<double>{1e-5, 3e-5, 5e-5, 8e-5, 11e-5, 13e-5, 15e-5, 18e-5, 31e-5, 33e-5, 35e-5, 38e-5, 51e-5, 53e-5, 55e-5, 58e-5, 81e-5, 83e-5, 85e-5, 88e-5, 1e-3});
 
             csv.close();
             cout << "Hoan thanh KB3\n";

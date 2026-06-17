@@ -15,6 +15,7 @@ constexpr uint16_t CRC_BITS = 8;
 
 constexpr uint16_t FRAME_SIZE = PAYLOAD_BITS + CRC_BITS; // default = 64 + 8
 
+constexpr uint16_t FRAME_SIZE_FEC = FRAME_SIZE * 2;
 // Channel
 constexpr double BER = 0.01;
 
