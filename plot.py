@@ -263,14 +263,14 @@ def plot_kb4():
     sns.barplot(
         data=df_plot,
         x="msg_length",
-        y="retransmission",
+        y="time(ms)",
         hue="scheme",
         ax=axes[1, 1]
     )
 
-    axes[1, 1].set_title("Transmission Time vs Input Size")
+    axes[1, 1].set_title("Number of Retransmission vs Input Size")
     axes[1, 1].set_xlabel("Message length (Bytes)")
-    axes[1, 1].set_ylabel("Time (ms)")
+    axes[1, 1].set_ylabel("Num of Retx")
 
 
     # Chỉ giữ legend ở một đồ thị

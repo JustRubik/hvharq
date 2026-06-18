@@ -63,7 +63,7 @@ void runArqExperiment(
 		bool state = (tx.getData() == rx.getData());
 
 		double efficiency =
-			(double)(msg.size() * 8) / ((total_frames + arq.getRetx()) * FRAME_SIZE);
+			(double)(rx.getData().size() * 8) / ((total_frames + arq.getRetx()) * FRAME_SIZE);
 
 		double throughput =
 			(time_ms > 0)
@@ -117,7 +117,7 @@ void runHarqExperiment(
 		bool state = (tx.getData() == rx.getData());
 
 		double efficiency =
-			(double)(msg.size() * 8) / ((total_frames + harq.getRetx()) * FRAME_SIZE);
+			(double)(rx.getData().size() * 8) / ((total_frames + harq.getRetx()) * FRAME_SIZE_FEC);
 
 		double throughput =
 			(time_ms > 0)
@@ -179,7 +179,7 @@ int main()
 	ofstream csv;
 	uint32_t id = 1;
 
-	openCsv(csv, "./csv/results_kb5_fs80.csv");
+	openCsv(csv, "./csv/results_kb5_fs136.csv");
 
 	double fixed_ber = 1e-4;
 
